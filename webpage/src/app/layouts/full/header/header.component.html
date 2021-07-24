@@ -1,0 +1,13 @@
+<button [matMenuTriggerFor]="profile" mat-icon-button class="m-r-10">
+  <img src="assets/images/users/profile.png" alt="user" class="profile-pic">
+</button>
+<mat-menu #profile="matMenu">
+
+  <h3 matLine class="m-l-15 m-r-15">{{ ( currentUser$ |async )?.name }}</h3>
+
+  <h6 matLine class="m-l-15 m-r-15">{{ (currentUser$|async)?.email }}</h6>
+
+  <button mat-menu-item (click)="logout()">
+    <mat-icon>exit_to_app</mat-icon> Sair
+  </button>
+</mat-menu>
