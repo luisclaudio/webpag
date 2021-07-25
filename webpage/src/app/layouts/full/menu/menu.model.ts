@@ -10,8 +10,6 @@ export class MenuModel {
     public type: string,
     public icon: string,
     public permission?: string,
-    public action?: string,
-    public title?: string,
     public badge?: MenuBadgeItemModel[],
     public separator?: MenuSeparatorModel[],
     public children?: MenuChildrenItemModel[]

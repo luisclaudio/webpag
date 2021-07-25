@@ -64,8 +64,6 @@ export class MenuAdapter extends HttpAdapter<MenuModel | null>  {
             childItem.name,
             childItem.type,
             childItem.permission,
-            childItem.action,
-            childItem.title,
             MenuChildItemChild
           )
         );
@@ -78,8 +76,6 @@ export class MenuAdapter extends HttpAdapter<MenuModel | null>  {
       item.type,
       item.icon,
       item.permission,
-      item.action,
-      item.title,
       badges,
       separators,
       menuChildren,

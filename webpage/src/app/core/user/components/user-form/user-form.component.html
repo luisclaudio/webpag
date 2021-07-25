@@ -6,7 +6,7 @@
 
         <mat-card>
 
-            <app-loading-spinner [show]="isLoading"></app-loading-spinner>
+            <app-loading-spinner [is_show]="isLoading"></app-loading-spinner>
 
             <mat-card-content>
                 <form (keydown.enter)="$event.preventDefault()" [formGroup]="resourceForm" (ngSubmit)="onSubmit()"

@@ -7,7 +7,7 @@ import { map } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 
 import { ResourceModel } from '../models/resource.model';
-import { ResponseModel, MetaModel } from '../models/response.model';
+import { APIResponse, MetaModel } from '../models/APIResponse';
 import { HttpAdapter } from '../adapter/http.adapter';
 
 export abstract class ResourceWithParentService<T extends ResourceModel> {
@@ -37,7 +37,7 @@ export abstract class ResourceWithParentService<T extends ResourceModel> {
             }
         }
 
-        return this.http.get<ResponseModel<T[]>>(`${this.url}/${this.parent_path}/${parent_id}/${this.child_path}`, { params: param })
+        return this.http.get<APIResponse<T[]>>(`${this.url}/${this.parent_path}/${parent_id}/${this.child_path}`, { params: param })
             .pipe(
                 map((response) => {
                   if (response && response.meta) {
@@ -52,7 +52,7 @@ export abstract class ResourceWithParentService<T extends ResourceModel> {
     }
 
     public get(parent_id:number, id: number): Observable<T> {
-        return this.http.get<ResponseModel<T>>(`${this.url}/${this.parent_path}/${parent_id}/${this.child_path}/${id}`)
+        return this.http.get<APIResponse<T>>(`${this.url}/${this.parent_path}/${parent_id}/${this.child_path}/${id}`)
           .pipe(
               map(response => {
                   return this.adapter.adaptFromApi(response.data);
@@ -61,7 +61,7 @@ export abstract class ResourceWithParentService<T extends ResourceModel> {
     }
 
     public store(parent_id: number, data: any): Observable<T> {
-        return this.http.post<ResponseModel<T>>(`${this.url}/${this.parent_path}/${parent_id}/${this.child_path}`, this.adapter.adaptToApi(data)).pipe(
+        return this.http.post<APIResponse<T>>(`${this.url}/${this.parent_path}/${parent_id}/${this.child_path}`, this.adapter.adaptToApi(data)).pipe(
             map(response => {
                 return this.adapter.adaptFromApi(response.data);
             })
@@ -69,7 +69,7 @@ export abstract class ResourceWithParentService<T extends ResourceModel> {
     }
 
     public update(parent_id: number, data: any): Observable<T> {
-        return this.http.put<ResponseModel<T>>(`${this.url}/${this.parent_path}/${parent_id}/${this.child_path}/${data.id}`, this.adapter.adaptToApi(data)).pipe(
+        return this.http.put<APIResponse<T>>(`${this.url}/${this.parent_path}/${parent_id}/${this.child_path}/${data.id}`, this.adapter.adaptToApi(data)).pipe(
             map(response => {
                 return this.adapter.adaptFromApi(response.data);
             })

@@ -7,8 +7,6 @@ export class MenuChildrenItemModel {
     public name: string,
     public type: string,
     public permission?: string,
-    public action?: string,
-    public title?: string,
     public child?: MenuSubChildrenModel[],
   ) {
   }

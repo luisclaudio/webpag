@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from "@angular/common";
 
 import { MaterialModule } from '../material-module';
 
@@ -13,6 +14,7 @@ import { LoadingSpinnerComponent } from "./components/loading-spinner/loading-sp
     LoadingSpinnerComponent
   ],
   imports: [
+    CommonModule,
     MaterialModule
   ],
   exports: [

@@ -1,18 +1,20 @@
 import { Injector } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 
 import { ResourceModel } from '../models/resource.model';
+import { APIResponse } from '../models/APIResponse';
 import { HttpAdapter } from '../adapter/http.adapter';
 
 export abstract class ResourceService<T extends ResourceModel> {
 
     public readonly url = environment.baseApi;
 
+    public meta$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
     protected http: HttpClient;
 
     protected constructor(
@@ -25,7 +27,11 @@ export abstract class ResourceService<T extends ResourceModel> {
 
     abstract get resourceName(): string;
 
-    public fetch(param: any): Observable<any> {
+    public getPagination(): Observable<number> {
+        return this.meta$.asObservable();
+    }
+
+    public fetch(param: any): Observable<T[]> {
         let params = new HttpParams();
 
         for (const key in param) {
@@ -34,11 +40,14 @@ export abstract class ResourceService<T extends ResourceModel> {
             }
         }
 
-        return this.http.get<T[]>(`${this.url}/${this.path}`, { params: params })
+        return this.http.get<APIResponse<T[]>>(`${this.url}/${this.path}`, { params: params })
             .pipe(
                 map((response) => {
-                    if (response && response && response.length > 0) {
-                      return response.map(item => this.adapter.adaptFromApi(item));
+                    if (response && response.total) {
+                      this.meta$.next(response.total);
+                    }
+                    if (response && response.data && response.data.length > 0) {
+                      return response.data.map(item => this.adapter.adaptFromApi(item));
                     }
                     return [];
                 })

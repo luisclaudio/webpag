@@ -9,7 +9,6 @@ import { FlexLayoutModule } from "@angular/flex-layout";
 import { MaterialModule } from "./core/material-module";
 
 import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
-import { AuthenticationInterceptor } from "./core/authentication/interceptors/authentication.interceptor";
 import { AuthenticationErrorInterceptor } from "./core/authentication/interceptors/authentication-error.interceptor";
 
 import { AuthorizationModule } from "./core/authorization/authorization.module";
@@ -60,7 +59,6 @@ import { AccordionLinkDirective } from './layouts/full/accordion/accordion-link.
     AuthorizationModule
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthenticationInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: AuthenticationErrorInterceptor, multi: true },
     { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG, multi: true }
   ],

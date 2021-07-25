@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient} from '@angular/common/http';
 
 import { CookieService } from 'ngx-cookie-service';
 
 import { environment } from "../../../../environments/environment";
 
-import { ResponseModel } from '../../resource/models/response.model';
+import { APIResponse } from '../../resource/models/APIResponse';
 import { User } from '../../user/models/user.model';
 import { AuthenticationModel } from '../authentication.model';
 import { AuthenticationAdapter } from "../authentication.adapter";
@@ -19,7 +19,6 @@ export class AuthenticationService {
 
     readonly url = environment.baseApi;
 
-    private authorization: string = 'techx-gsci-ng-security-authorization';
     private permissions: string =  'techx-gsci-ng-security-permissions';
     private user: string =  'techx-gsci-ng-security-user';
     private path: string =  '/';
@@ -31,17 +30,17 @@ export class AuthenticationService {
     constructor(
         private http: HttpClient,
         private cookieService: CookieService,
-        private authenticationAdapter: AuthenticationAdapter
+        private authenticationAdapter: AuthenticationAdapter,
     ) {}
 
     login(credentials: { email: string, password: string }): Observable<AuthenticationModel> {
-        return this.http.post<ResponseModel<AuthenticationModel>>(`${this.url}/login`, credentials)
+
+        return this.http.get<APIResponse<AuthenticationModel>>(`${this.url}/users`, { params: credentials })
             .pipe(
                 map((response) => {
                   if (response && response.data ) {
                     const authenticationModel = this.authenticationAdapter.adaptFromApi(response.data);
 
-                    this.cookieService.set(this.authorization, authenticationModel.token, 0, this.path);
                     this.cookieService.set(this.user, JSON.stringify(authenticationModel.user), 0, this.path);
                     this.cookieService.set(this.permissions, JSON.stringify(authenticationModel.permissions), 0, this.path);
 
@@ -55,33 +54,18 @@ export class AuthenticationService {
                     this.subjLoggedIn$.next(false);
                     this.subjUser$.next(null);
 
-                    return new AuthenticationModel(null, null, '');
+                    return new AuthenticationModel(null, null);
                   }
                 })
             );
     }
 
     isAuthenticated(): Observable<boolean> {
-        if (this.cookieService.check(this.authorization)) {
-            return this.checkTokenValidation();
-        }
+      if (this.cookieService.check(this.user)) {
+        return of(this.cookieService.check(this.user));
+      }
 
-        return this.subjLoggedIn$.asObservable();
-    }
-
-    checkTokenValidation(): Observable<boolean> {
-        return of(this.cookieService.check(this.authorization));
-    }
-
-    checkToken(): boolean {
-        return this.cookieService.check(this.authorization);
-    }
-
-    getToken(): string {
-        if (this.cookieService.check(this.authorization)) {
-            return this.cookieService.get(this.authorization);
-        }
-        return '';
+      return this.subjLoggedIn$.asObservable();
     }
 
     getUser(): Observable<User | null> {
@@ -108,7 +92,6 @@ export class AuthenticationService {
     }
 
     logout() {
-        this.cookieService.delete(this.authorization, this.path);
         this.cookieService.delete(this.permissions, this.path);
         this.cookieService.delete(this.user, this.path);
 

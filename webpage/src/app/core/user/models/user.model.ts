@@ -21,6 +21,7 @@ export class UserApi extends ResourceModel{
         public is_active: boolean,
         public password?: string,
         public c_password?: string,
+        public created_at?: string,
         public id?: number,
     ) {
         super();

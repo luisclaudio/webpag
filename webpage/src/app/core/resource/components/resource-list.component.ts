@@ -8,7 +8,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 
-import { MetaModel } from '../models/response.model';
 import { ResourceModel } from '../models/resource.model';
 import { DefaultHandleConfig } from '../models/default-handle-config.model';
 
@@ -24,17 +23,15 @@ export abstract class ResourceListComponent<T extends ResourceModel> implements 
 
     @ViewChildren(MatPaginator) public paginator: MatPaginator | null = null;
 
-    protected accessToken: string = '';
     public isLoading = false;
 
     protected paginationLimitPerPageProperty = 'limit';
     protected paginationPageNumberProperty = 'page';
 
     public length = 0;
-    public pageSize = 25;
+    public page = 1;
+    public pageSize = 5;
     public pageSizeOptions: number[] = [25, 50, 100];
-
-    public currentPageMeta: MetaModel | null = null;
 
     public dataSource: MatTableDataSource<T> = new MatTableDataSource<T>();
 
@@ -44,7 +41,6 @@ export abstract class ResourceListComponent<T extends ResourceModel> implements 
     protected fb: FormBuilder;
     protected snackBar: MatSnackBar;
     protected dialog: MatDialog;
-    protected authenticationService: AuthenticationService;
     protected changeDetectorRef: ChangeDetectorRef;
 
     protected resourceName = this.resourceService.resourceName;
@@ -59,18 +55,16 @@ export abstract class ResourceListComponent<T extends ResourceModel> implements 
         this.fb = this.injector.get(FormBuilder);
         this.snackBar = this.injector.get(MatSnackBar);
         this.dialog = this.injector.get(MatDialog);
-        this.authenticationService = this.injector.get(AuthenticationService);
         this.changeDetectorRef = this.injector.get(ChangeDetectorRef);
     }
 
     ngOnInit() {
         const resources$ = this.getResources({
-          [this.paginationLimitPerPageProperty]: 25,
-          [this.paginationPageNumberProperty]: 1
+          [this.paginationLimitPerPageProperty]: this.pageSize,
+          [this.paginationPageNumberProperty]: this.page
         });
         this.initObservables.push(resources$);
         this.isLoading = true;
-        this.accessToken = this.authenticationService.getToken();
         this.buildSearchForm();
         this.zipRequests(this.initObservables);
     }
@@ -118,7 +112,7 @@ export abstract class ResourceListComponent<T extends ResourceModel> implements 
           [this.paginationPageNumberProperty]: event$.pageIndex + 1,
           ...data
         }).subscribe(
-        () => {},
+        () => this.pagination().subscribe(),
         () => {},
         () => {
             this.runChangeDetector();
@@ -150,11 +144,11 @@ export abstract class ResourceListComponent<T extends ResourceModel> implements 
 
         const data = this.getDataToSearch();
         this.getResources({
-          [this.paginationLimitPerPageProperty]: 25,
-          [this.paginationPageNumberProperty]: 1,
+          [this.paginationLimitPerPageProperty]: this.pageSize,
+          [this.paginationPageNumberProperty]: this.page,
           ...data
         }).subscribe(
-            () => {},
+            () => this.pagination().subscribe(),
             () => {},
             () => {
                 this.runChangeDetector();
@@ -192,12 +186,20 @@ export abstract class ResourceListComponent<T extends ResourceModel> implements 
         this.isLoading = true;
 
         zip(...requests).subscribe(
-        () => {},
+        () => this.pagination().subscribe(),
         () => {},
         () => {
             this.runChangeDetector();
             this.isLoading = false;
         });
+    }
+
+    protected pagination() {
+      return this.resourceService.getPagination().pipe(
+        tap((meta) => {
+          this.length = (meta) ? meta : 0;
+        })
+      );
     }
 
     protected onDelete(id: number) {
@@ -227,10 +229,10 @@ export abstract class ResourceListComponent<T extends ResourceModel> implements 
         this.resourceSearchForm.reset();
 
         this.getResources({
-          [this.paginationLimitPerPageProperty]: this.currentPageMeta!.per_page,
-          [this.paginationPageNumberProperty]: this.currentPageMeta!.current_page
+          [this.paginationLimitPerPageProperty]: this.length,
+          [this.paginationPageNumberProperty]: this.pageSize
         }).subscribe(
-            () => {},
+            () => this.pagination().subscribe(),
             () => {},
             () => {
                 this.runChangeDetector();

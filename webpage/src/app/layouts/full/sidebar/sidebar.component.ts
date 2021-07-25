@@ -1,17 +1,18 @@
-import { ChangeDetectorRef, Component, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from "rxjs";
 import { MediaMatcher } from '@angular/cdk/layout';
 
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 import { MenuModel } from "../menu/menu.model";
-import { MenuAdapter } from "../menu/menu.adapter";
+import { MenuService } from "../menu/menu.service";
 
 @Component({
   selector: 'app-sidebar',
   templateUrl: './sidebar.component.html',
   styleUrls: []
 })
-export class AppSidebarComponent implements OnDestroy {
+export class AppSidebarComponent implements OnInit, OnDestroy {
 
   public config: PerfectScrollbarConfigInterface = {};
   public mobileQuery: MediaQueryList;
@@ -19,30 +20,29 @@ export class AppSidebarComponent implements OnDestroy {
   readonly _mobileQueryListener: () => void;
   public status: boolean = true;
 
-  public itemSelect: number[] = []
+  public itemSelect: number[] = [];
 
-  public menu: MenuModel[] = []
+  public menu: MenuModel[] = [];
+  private menuSub: Subscription | null = null;
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private media: MediaMatcher,
-    private menuAdapter: MenuAdapter
+    private menuService: MenuService
   ) {
     this.mobileQuery = media.matchMedia('(min-width: 768px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
+  }
 
-    this.menu = [
-      menuAdapter.adaptFromApi({
-        state: 'library',
-        name: 'Biblioteca',
-        type: 'link',
-        icon: 'account_tree',
-        permission: 'protocol.step.list',
-        action: 'Solicitante',
-        title: 'Biblioteca de Arquivos'
-      }),
-    ];
+  ngOnInit(): void {
+    this.menuSub = this.menuService.fetch().subscribe(
+      (response) => {
+        if (response && response.length > 0) {
+          this.menu = response;
+        }
+      }
+    )
   }
 
   scrollToTop(){
@@ -54,5 +54,8 @@ export class AppSidebarComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
+    if (this.menuSub) {
+      this.menuSub.unsubscribe();
+    }
   }
 }

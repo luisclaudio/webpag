@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class LoadingSpinnerComponent {
 
-  @Input() public show: boolean = false;
+  @Input() public is_show: boolean = false;
 
   constructor() {
   }

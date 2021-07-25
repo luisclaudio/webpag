@@ -17,8 +17,7 @@ export class AuthenticationAdapter extends HttpAdapter<AuthenticationModel | nul
   adaptFromApi(item: any): AuthenticationModel {
     return new AuthenticationModel(
       item.user ? this.userAdapter.adaptFromApi(item.user) : null,
-      item.profile,
-      item.token,
+      item.permissons
 
     );
   }

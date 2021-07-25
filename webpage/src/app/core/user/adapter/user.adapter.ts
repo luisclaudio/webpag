@@ -29,6 +29,7 @@ export class UserAdapter extends HttpAdapter<User | UserApi>  {
       item.is_active,
       item.password,
       item.c_password,
+      moment().format('YYYY-MM-DD'),
       item.id,
     );
   }

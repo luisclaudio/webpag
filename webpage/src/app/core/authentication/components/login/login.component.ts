@@ -43,16 +43,13 @@ export class LoginComponent implements OnInit {
 
     this.authenticationService.login(credentials)
         .pipe(first())
-        .subscribe((response) => {
-
+        .subscribe(() => {
+            this.notify('Successfully logged in. Welcome!');
             this.isLoading = false;
-
-            this.notify('Logado com sucesso. Bem vindo!');
-
-        }, (error) => {
-
-          (error.error) ? this.notify(error.error.message) : this.notify('Erro ao logar. Por favor, verifique as credenciais informadas.');
-            this.isLoading = false;
+            this.router.navigate(['/']);
+        }, () => {
+          this.notify('Error while logging in. Please check the credentials provided.');
+          this.isLoading = false;
         });
 
   }
