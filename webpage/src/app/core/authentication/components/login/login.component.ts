@@ -43,10 +43,14 @@ export class LoginComponent implements OnInit {
 
     this.authenticationService.login(credentials)
         .pipe(first())
-        .subscribe(() => {
+        .subscribe((response) => {
+          if (response && response.user) {
             this.notify('Successfully logged in. Welcome!');
-            this.isLoading = false;
-            this.router.navigate(['/']);
+            // this.router.navigate(['/']);
+          } else {
+            this.notify('No user found.');
+          }
+          this.isLoading = false;
         }, () => {
           this.notify('Error while logging in. Please check the credentials provided.');
           this.isLoading = false;

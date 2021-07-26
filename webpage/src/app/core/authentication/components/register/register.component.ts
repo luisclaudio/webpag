@@ -41,7 +41,7 @@ export class RegisterComponent implements OnInit {
       is_active: true,
     };
 
-    this.userService.store(credentials)
+    this.userService.userStore(credentials)
       .subscribe(() => {
         this.notify('Registration successfully Complete. Welcome!');
         this.isLoading = false;
@@ -53,7 +53,7 @@ export class RegisterComponent implements OnInit {
   }
 
   private notify(message: string): void {
-    this.snackBar.open(message, 'OK', { duration: 3000 });
+    this.snackBar.open(message, 'OK', { duration: 5000 });
   }
 
 }

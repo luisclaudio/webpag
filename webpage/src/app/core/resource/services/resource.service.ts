@@ -25,6 +25,10 @@ export abstract class ResourceService<T extends ResourceModel> {
         this.http = this.injector.get(HttpClient);
     }
 
+    public setNewPath(newPath: string){
+      this.path = newPath;
+    }
+
     abstract get resourceName(): string;
 
     public getPagination(): Observable<number> {

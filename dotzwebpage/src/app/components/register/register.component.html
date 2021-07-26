@@ -1,0 +1,91 @@
+<div class="login-register">
+
+  <app-loading-spinner [is_show]="isLoading"></app-loading-spinner>
+
+  <div class="login-register-box">
+    <mat-card>
+      <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+          <div fxLayout="row wrap" fxLayoutAlign="space-between center" >
+
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100" class="text-center">
+              <h4 class="register-title m-t-0">Register to App</h4>
+            </div>
+
+          </div>
+
+          <div fxLayout="row wrap">
+
+            <!-- col full-->
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+              <mat-form-field>
+                <input matInput placeholder="Name" formControlName="name">
+              </mat-form-field>
+              <small *ngIf="form.get('name')?.hasError('required') && form.get('name')?.touched"
+                     class="text-danger support-text">
+                Name is required
+              </small>
+            </div>
+
+            <!-- col full-->
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+              <mat-form-field>
+                <input matInput placeholder="E-mail" formControlName="email">
+              </mat-form-field>
+              <small *ngIf="form.get('email')?.hasError('required') && form.get('email')?.touched"
+                     class="text-danger support-text">
+                E-mail is required
+              </small>
+            </div>
+
+            <!-- col full-->
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+              <mat-form-field>
+                <input matInput type="password" placeholder="Password" formControlName="password">
+              </mat-form-field>
+              <small *ngIf="form.get('password')?.hasError('required') && form.get('password')?.touched"
+                     class="text-danger support-text">
+                Password is required
+              </small>
+            </div>
+
+            <!-- col full-->
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+              <mat-form-field>
+                <input matInput type="password" placeholder="Confirm Password" formControlName="c_password">
+              </mat-form-field>
+              <small *ngIf="form.get('c_password')?.hasError('required') && form.get('c_password')?.touched"
+                     class="text-danger support-text">
+                Confirm password is required
+              </small>
+            </div>
+
+            <!-- col full-->
+            <div fxFlex.gt-sm="100" fxFlex.gt-xs="100" fxFlex="100">
+              <button mat-raised-button color="primary" class="btn-block btn-lg m-t-20 m-b-20"
+                      type="submit" [disabled]="!form.valid">
+                Create your account
+              </button>
+            </div>
+
+            <div fxflex.gt-sm="100" fxflex.gt-xs="100" fxflex="100" class="text-center">
+              <span>
+                Already have an account?
+                <a class="text-info link" [routerLink]="[ '/authentication/login' ]">
+                  Login
+                </a>
+              </span>
+            </div>
+
+          </div>
+
+        </form>
+
+      </mat-card-content>
+
+    </mat-card>
+
+  </div>
+
+</div>

@@ -24,21 +24,21 @@ export class MenuService {
       name: 'Address ship',
       type: 'link',
       icon: 'room',
-      permission: 'address.list'
+      permission: 'address'
     },
     {
       state: 'products',
       name: 'Products',
       type: 'link',
       icon: 'list',
-      permission: 'products.lis'
+      permission: 'product'
     },
     {
       state: 'orders',
       name: 'Orders',
       type: 'link',
       icon: 'star',
-      permission: 'products.lis'
+      permission: 'order'
     }
   ]
 

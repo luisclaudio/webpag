@@ -1,0 +1,80 @@
+<!-- row -->
+<div fxLayout="row wrap">
+  <!-- column -->
+  <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="50">
+
+    <mat-card>
+
+      <mat-card-content>
+
+        <mat-card-title>Address ship</mat-card-title>
+        <mat-card-subtitle>Change your address ship here.</mat-card-subtitle>
+
+
+
+      </mat-card-content>
+
+    </mat-card>
+
+  </div>
+
+  <!-- column -->
+  <div fxLayout="column" fxFlex.gt-sm="50" fxFlex="50">
+
+    <mat-card>
+
+      <mat-card-content>
+
+        <mat-card-title>Points Balance</mat-card-title>
+        <p>You still have {{ '500' }} points accumulated.</p>
+
+        <h3>Last transactions of your account</h3>
+
+
+
+      </mat-card-content>
+
+    </mat-card>
+
+  </div>
+
+</div>
+
+<!-- row -->
+<div fxLayout="row wrap">
+  <!-- column -->
+  <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+
+    <mat-card>
+
+      <mat-card-content>
+
+        <mat-card-title>Product list</mat-card-title>
+        <mat-card-subtitle>This is a preview of products available for exchange.</mat-card-subtitle>
+
+        <div class="table-rasponsive">
+
+          <mat-table #table [dataSource]="dataSource">
+
+            <!-- column -->
+            <ng-container matColumnDef="code">
+              <mat-header-cell *matHeaderCellDef> Code </mat-header-cell>
+              <mat-cell *matCellDef="let row" title="{{ row.code }}">
+                {{ row.code }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+          </mat-table>
+
+        </div>
+
+
+      </mat-card-content>
+
+    </mat-card>
+
+  </div>
+</div>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import {BehaviorSubject, Observable, of, throwError} from 'rxjs';
 import { map } from 'rxjs/operators';
 import { HttpClient} from '@angular/common/http';
 
@@ -19,8 +19,8 @@ export class AuthenticationService {
 
     readonly url = environment.baseApi;
 
-    private permissions: string =  'techx-gsci-ng-security-permissions';
-    private user: string =  'techx-gsci-ng-security-user';
+    private permissions: string =  'av-ng-security-permissions';
+    private user: string =  'av-ng-security-user';
     private path: string =  '/';
 
     private subjUser$: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
@@ -35,27 +35,38 @@ export class AuthenticationService {
 
     login(credentials: { email: string, password: string }): Observable<AuthenticationModel> {
 
-        return this.http.get<APIResponse<AuthenticationModel>>(`${this.url}/users`, { params: credentials })
+        return this.http.get<APIResponse<User[]>>(`${this.url}/users`, { params: credentials })
             .pipe(
                 map((response) => {
-                  if (response && response.data ) {
-                    const authenticationModel = this.authenticationAdapter.adaptFromApi(response.data);
+                  if (response && response.data && response.data.length > 0) {
+                      console.log(response);
+                      console.log(response.data);
 
-                    this.cookieService.set(this.user, JSON.stringify(authenticationModel.user), 0, this.path);
-                    this.cookieService.set(this.permissions, JSON.stringify(authenticationModel.permissions), 0, this.path);
+                      const userFinder = response.data[0];
 
-                    this.subjLoggedIn$.next(true);
+                      const authenticationModel = this.authenticationAdapter.adaptFromApi(userFinder);
 
-                    this.subjUser$.next(authenticationModel.user);
+                      console.log(authenticationModel);
 
-                    return authenticationModel;
-                  } else {
+                      if (authenticationModel.user && authenticationModel.permissions) {
 
-                    this.subjLoggedIn$.next(false);
-                    this.subjUser$.next(null);
+                        const listOfPermissions = authenticationModel.permissions.map(perm => perm.name);
 
-                    return new AuthenticationModel(null, null);
-                  }
+                        this.cookieService.set(this.user, JSON.stringify(authenticationModel.user), 0, this.path);
+                        this.cookieService.set(this.permissions, JSON.stringify(authenticationModel.permissions), 0, this.path);
+
+                        this.subjLoggedIn$.next(true);
+
+                        this.subjUser$.next(authenticationModel.user);
+                      }
+                      return authenticationModel;
+                    } else {
+
+                      this.subjLoggedIn$.next(false);
+                      this.subjUser$.next(null);
+
+                      return new AuthenticationModel(null, null);
+                    }
                 })
             );
     }

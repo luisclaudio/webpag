@@ -9,7 +9,7 @@ export const UserRoutes: Routes = [
     {
         path: '',
         component: UserListComponent,
-        // canActivate: [AuthorizationGuard],
+        canActivate: [AuthorizationGuard],
         data: {
             title: 'Usuário',
             role: 'user.list',
@@ -22,7 +22,7 @@ export const UserRoutes: Routes = [
     {
         path: 'form',
         component: UserFormComponent,
-        // canActivate: [AuthorizationGuard],
+        canActivate: [AuthorizationGuard],
         data: {
             title: 'Usuário: Cadastro',
             role: 'user.create',
@@ -36,7 +36,7 @@ export const UserRoutes: Routes = [
     {
         path: 'form/:id',
         component: UserFormComponent,
-        // canActivate: [AuthorizationGuard],
+        canActivate: [AuthorizationGuard],
         data: {
             title: 'Usuário: Edição',
             role: 'user.update',

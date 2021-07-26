@@ -10,7 +10,7 @@ import { UnauthorizedComponent } from "./core/authorization/components/unauthori
 const routes: Routes = [
   {
     path: '',
-    // canActivate: [ AuthenticationGuard ],
+    canActivate: [ AuthenticationGuard ],
     component: FullComponent,
     children: [
       {

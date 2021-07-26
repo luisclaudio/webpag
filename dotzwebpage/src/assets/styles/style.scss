@@ -1,0 +1,19 @@
+@import 'variable';
+
+@import 'app';
+@import 'header';
+@import 'widgets';
+@import 'pages';
+@import 'responsive';
+
+// Blue Theme
+
+.blue {
+  @import 'colors/blue';
+  @include angular-material-theme($blue-app-theme);
+}
+
+$custom-typography: mat-typography-config(
+  $font-family: 'Poppins, sans-serif'
+);
+@include mat-core($custom-typography);

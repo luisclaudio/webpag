@@ -1,4 +1,5 @@
 import { ResourceModel } from '../../resource/models/resource.model';
+import {PermissionModel} from "./permisson.model";
 
 export class User extends ResourceModel {
 
@@ -7,7 +8,8 @@ export class User extends ResourceModel {
         public name: string,
         public email: string,
         public is_active: boolean,
-        public created_at: Date | null
+        public created_at: Date | null,
+        public permissions: PermissionModel[]
     ) {
         super();
     }
