@@ -1,1 +1,60 @@
-<p>products works!</p>
+<!-- row -->
+<div fxLayout="row wrap">
+  <!-- column -->
+  <div fxLayout="column" fxFlex.gt-sm="100" fxFlex="100">
+
+    <mat-card>
+
+      <mat-card-content>
+
+        <app-loading-spinner [is_show]="isLoading"></app-loading-spinner>
+
+        <mat-card-title>Product list</mat-card-title>
+        <mat-card-subtitle>This is a preview of products available for exchange.</mat-card-subtitle>
+
+        <div class="table-rasponsive">
+
+          <mat-table #table [dataSource]="dataSource">
+
+            <!-- column -->
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+              <mat-cell *matCellDef="let row" title="{{ row.name }}">
+                {{ row.name }}
+              </mat-cell>
+            </ng-container>
+
+            <!-- column -->
+            <ng-container matColumnDef="price">
+              <mat-header-cell *matHeaderCellDef> Price </mat-header-cell>
+              <mat-cell *matCellDef="let row" title="{{ row.price }}">
+                {{ row.price }}
+              </mat-cell>
+            </ng-container>
+
+            <!-- column -->
+            <ng-container matColumnDef="description">
+              <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+              <mat-cell *matCellDef="let row" title="{{ row.description }}">
+                {{ row.description }}
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+          </mat-table>
+
+          <mat-paginator color="primary" [pageSizeOptions]="pageSizeOptions" [length]="length"
+                          [pageSize]="pageSize" (page)="pageChanged($event)" showFirstLastButtons>
+          </mat-paginator>
+
+        </div>
+
+
+      </mat-card-content>
+
+    </mat-card>
+
+  </div>
+</div>

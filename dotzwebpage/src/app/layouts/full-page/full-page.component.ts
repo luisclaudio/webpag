@@ -1,6 +1,5 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { MediaMatcher } from "@angular/cdk/layout";
-import { environment } from "../../../environments/environment";
 
 @Component({
   selector: 'app-full-page',
@@ -9,7 +8,7 @@ import { environment } from "../../../environments/environment";
 })
 export class FullPageComponent {
 
-  readonly name = environment.name;
+  readonly name = 'AV-DOTZ';
 
   public status: boolean = false;
 
