@@ -6,8 +6,6 @@ import { AuthorizationGuard } from "./guards/authorization.guard";
 
 import { HomeComponent } from "./components/home/home.component";
 import { LoginComponent } from "./components/login/login.component";
-import { ProductsComponent } from "./components/products/products.component";
-import { OrdersComponent } from "./components/orders/orders.component";
 import { RegisterComponent } from "./components/register/register.component";
 import { BlankPageComponent } from "./layouts/blank-page/blank-page.component";
 import { FullPageComponent } from "./layouts/full-page/full-page.component";
@@ -27,6 +25,10 @@ const routes: Routes = [
           role: 'home',
         }
       },
+      {
+        path: 'unauthorized',
+        component: UnauthorizedComponent
+      }
     ]
   },
   {

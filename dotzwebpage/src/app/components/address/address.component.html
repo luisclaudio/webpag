@@ -109,7 +109,8 @@
             </div>
 
             <mat-card-actions>
-              <button [disabled]="!resourceForm.valid" mat-raised-button color="primary" type="submit">
+              <button [disabled]="!resourceForm.valid" mat-raised-button color="primary"
+                      type="submit" appHideAuthorization permission="address">
                   ENVIAR
               </button>
             </mat-card-actions>

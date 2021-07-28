@@ -21,6 +21,9 @@ import { LoadingSpinnerComponent } from './layouts/loading-spinner/loading-spinn
 import { UnauthorizedComponent } from './layouts/unauthorized/unauthorized.component';
 import { AddressComponent } from './components/address/address.component';
 import { HeaderComponent } from './layouts/header/header.component';
+import { DisableAuthorizationComponent } from './layouts/disable-authorization/disable-authorization.component';
+
+import { HideAuthorizationDirective } from './directives/hide-authorization.directive';
 
 @NgModule({
   declarations: [
@@ -35,7 +38,9 @@ import { HeaderComponent } from './layouts/header/header.component';
     LoadingSpinnerComponent,
     UnauthorizedComponent,
     AddressComponent,
-    HeaderComponent
+    HeaderComponent,
+    HideAuthorizationDirective,
+    DisableAuthorizationComponent
   ],
   imports: [
     BrowserModule,

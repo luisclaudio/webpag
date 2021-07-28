@@ -19,7 +19,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   public length = 0;
   public page = 1;
-  public pageSize = 5;
+  public pageSize = 7;
   public pageSizeOptions: number[] = [5, 25, 50, 100];
   private paginationLimitPerPageProperty = 'limit';
   private paginationPageNumberProperty = 'page';

@@ -1,0 +1,27 @@
+<a mat-icon-button
+   *ngIf="type === 'link'"
+   (click)="onClick($event)"
+   [color]="color"
+   [ngStyle]="style">
+    <mat-icon class="mat-18">{{icon}}</mat-icon>
+    {{ text }}
+</a>
+
+<button mat-icon-button
+    *ngIf="type === 'btn-icon'"
+    [color]="color"
+    [ngStyle]="style"
+    (click)="onClick($event)"
+    type="button">
+    <mat-icon class="mat-18">{{icon}}</mat-icon>
+    {{ text }}
+</button>
+
+<button mat-raised-button
+    *ngIf="type === 'btn'"
+    [color]="color"
+    [ngStyle]="style"
+    (click)="onClick($event)"
+    type="button">
+    {{ text }}
+</button>
