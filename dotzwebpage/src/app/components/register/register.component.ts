@@ -38,7 +38,7 @@ export class RegisterComponent implements OnInit {
 
     const credentials = {
       ...this.form.value,
-      is_active: true,
+      balance: this.userService.initialBalance
     };
 
     this.userService.userStore(credentials)

@@ -19,6 +19,8 @@ import { BlankPageComponent } from './layouts/blank-page/blank-page.component';
 import { FullPageComponent } from './layouts/full-page/full-page.component';
 import { LoadingSpinnerComponent } from './layouts/loading-spinner/loading-spinner.component';
 import { UnauthorizedComponent } from './layouts/unauthorized/unauthorized.component';
+import { AddressComponent } from './components/address/address.component';
+import { HeaderComponent } from './layouts/header/header.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import { UnauthorizedComponent } from './layouts/unauthorized/unauthorized.compo
     BlankPageComponent,
     FullPageComponent,
     LoadingSpinnerComponent,
-    UnauthorizedComponent
+    UnauthorizedComponent,
+    AddressComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,

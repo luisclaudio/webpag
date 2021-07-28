@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { BehaviorSubject, forkJoin, Observable, of } from "rxjs";
 import { map, mergeAll } from 'rxjs/operators';
 
@@ -18,12 +18,16 @@ import { APIResponse } from "../models/APIResponse";
 })
 export class UsersService {
 
+  public readonly initialBalance: number = 500;
+
   private readonly url = environment.baseApi;
   private path: string = 'users';
 
+  private meta$: BehaviorSubject<number> = new BehaviorSubject<number>(0);
+
   private userCookieAddress: string =  'av-ng-security-user';
   private userPermissionCookieAddress: string =  'av-ng-security-permissions';
-  private pathCookie: string =  'av-ng-security-user';
+  private pathCookie: string =  '/';
 
   private subjUser$: BehaviorSubject<UserModel | null> = new BehaviorSubject<UserModel | null>(null);
   private subjAuthorization$: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
@@ -36,11 +40,55 @@ export class UsersService {
     private permissionAdapter: PermissionAdapter,
   ) { }
 
+  public getPagination(): Observable<number> {
+    return this.meta$.asObservable();
+  }
+
+  public fetch(param: any): Observable<UserModel[]> {
+    let params = new HttpParams();
+
+    for (const key in param) {
+        if (param.hasOwnProperty(key)) {
+            params = params.append(key, `${param[key]}`);
+        }
+    }
+
+    return this.http.get<APIResponse<UserModel[]>>(`${this.url}/${this.path}`, { params: params })
+        .pipe(
+            map((response) => {
+                if (response && response.total) {
+                  this.meta$.next(response.total);
+                }
+                if (response && response.data && response.data.length > 0) {
+                  return response.data.map(item => this.userAdapter.adaptFromApi(item));
+                }
+                return [];
+            })
+        );
+  }
+
+  public get(id: number): Observable<UserModel> {
+    return this.http.get<UserModel>(`${this.url}/${this.path}/${id}`)
+      .pipe(
+          map(response => {
+              return this.userAdapter.adaptFromApi(response);
+          })
+      );
+  }
+
   public store(data: any): Observable<UserModel> {
     return this.http.post<UserModel>(`${this.url}/${this.path}`, this.userAdapter.adaptToApi(data)).pipe(
       map(response => {
         return this.userAdapter.adaptFromApi(response);
       })
+    );
+  }
+
+  public update(data: any): Observable<UserModel> {
+    return this.http.put<UserModel>(`${this.url}/${this.path}/${data.id}`, this.userAdapter.adaptToApi(data)).pipe(
+        map(response => {
+            return this.userAdapter.adaptFromApi(response);
+        })
     );
   }
 
@@ -96,7 +144,6 @@ export class UsersService {
               id: userAdapted.id,
               name: userAdapted.name,
               email: userAdapted.email,
-              is_active: userAdapted.is_active,
               created_at: userAdapted.created_at
             });
 
@@ -113,12 +160,11 @@ export class UsersService {
               userAdapted.id,
               userAdapted.name,
               userAdapted.email,
-              userAdapted.is_active,
               userAdapted.created_at,
               userAdapted.permissions
             );
           }
-          return new UserModel(0, '', '', false, new Date(), []);
+          return new UserModel(0, '', '', new Date(), []);
         })
       );
   }
@@ -148,4 +194,16 @@ export class UsersService {
 
     return permissionsObject.includes(permission);
   }
+
+  getUser(): Observable<UserModel | null> {
+    if (this.cookieService.check(this.userCookieAddress)) {
+
+        const userCookie = JSON.parse(this.cookieService.get(this.userCookieAddress));
+
+        this.subjUser$.next(userCookie);
+
+        return this.subjUser$.asObservable();
+    }
+    return of();
+}
 }

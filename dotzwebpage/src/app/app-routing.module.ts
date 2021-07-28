@@ -27,26 +27,6 @@ const routes: Routes = [
           role: 'home',
         }
       },
-      {
-        path: 'products',
-        component: ProductsComponent,
-        canActivate: [ AuthorizationGuard ],
-        data: {
-          role: 'product',
-        }
-      },
-      {
-        path: 'orders',
-        component: OrdersComponent,
-        canActivate: [ AuthorizationGuard ],
-        data: {
-          role: 'order',
-        }
-      },
-      {
-        path: 'unauthorized',
-        component: UnauthorizedComponent
-      }
     ]
   },
   {

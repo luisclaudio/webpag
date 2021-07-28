@@ -30,9 +30,14 @@ export class UserAdapter extends HttpAdapter<UserModel | UserModelApi>  {
       item.id,
       item.name,
       item.email,
-      item.is_active,
       formattedCreatedAt,
-      permissions
+      permissions,
+      item.country,
+      item.state,
+      item.city,
+      item.county,
+      item.street,
+      item.house_number
     );
   }
 
@@ -40,7 +45,12 @@ export class UserAdapter extends HttpAdapter<UserModel | UserModelApi>  {
     return new UserModelApi(
       item.name,
       item.email,
-      item.is_active,
+      item.country,
+      item.state,
+      item.city,
+      item.county,
+      item.street,
+      item.house_number,
       item.password,
       item.c_password,
       moment().format('YYYY-MM-DD'),
