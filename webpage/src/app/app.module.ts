@@ -1,67 +1,58 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ReactiveFormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+
+import { MaterialModule } from "./material-module";
 import { FlexLayoutModule } from "@angular/flex-layout";
-
-import { MaterialModule } from "./core/material-module";
-
-import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
-import { AuthenticationErrorInterceptor } from "./core/authentication/interceptors/authentication-error.interceptor";
-
-import { AuthorizationModule } from "./core/authorization/authorization.module";
-
-import { PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG, PerfectScrollbarConfigInterface } from "ngx-perfect-scrollbar";
-const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-  suppressScrollX: true,
-  wheelSpeed: 2,
-  wheelPropagation: true
-};
 
 import { AppRoutingModule } from './app-routing.module';
 
-import { FullComponent } from './layouts/full/full.component';
-import { BlankComponent } from './layouts/blank/blank.component';
-import { HeaderComponent } from './layouts/full/header/header.component';
-import { AppSidebarComponent } from './layouts/full/sidebar/sidebar.component';
-import { SpinnerComponent } from './layouts/full/spinner/spinner.component';
-import { BreadcrumbComponent } from './layouts/full/breadcrumb/breadcrumb.component';
-import { SearchComponent } from './layouts/full/search/search.component';
-import { AccordionDirective } from './layouts/full/accordion/accordion.directive';
-import { AccordionAnchorDirective } from './layouts/full/accordion/accordion-anchor.directive';
-import { AccordionLinkDirective } from './layouts/full/accordion/accordion-link.directive';
+import { AppComponent } from './app.component';
+import { ProductsComponent } from './components/products/products.component';
+import { OrdersComponent } from './components/orders/orders.component';
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { BlankPageComponent } from './layouts/blank-page/blank-page.component';
+import { FullPageComponent } from './layouts/full-page/full-page.component';
+import { LoadingSpinnerComponent } from './layouts/loading-spinner/loading-spinner.component';
+import { UnauthorizedComponent } from './layouts/unauthorized/unauthorized.component';
+import { AddressComponent } from './components/address/address.component';
+import { HeaderComponent } from './layouts/header/header.component';
+import { DisableAuthorizationComponent } from './layouts/disable-authorization/disable-authorization.component';
+
+import { HideAuthorizationDirective } from './directives/hide-authorization.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FullComponent,
-    BlankComponent,
+    ProductsComponent,
+    OrdersComponent,
+    HomeComponent,
+    LoginComponent,
+    RegisterComponent,
+    BlankPageComponent,
+    FullPageComponent,
+    LoadingSpinnerComponent,
+    UnauthorizedComponent,
+    AddressComponent,
     HeaderComponent,
-    AppSidebarComponent,
-    SpinnerComponent,
-    BreadcrumbComponent,
-    SearchComponent,
-    AccordionDirective,
-    AccordionAnchorDirective,
-    AccordionLinkDirective
+    HideAuthorizationDirective,
+    DisableAuthorizationComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    FormsModule,
     ReactiveFormsModule,
-    FlexLayoutModule,
-    PerfectScrollbarModule,
     MaterialModule,
-    AuthorizationModule
+    FlexLayoutModule
   ],
-  providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthenticationErrorInterceptor, multi: true },
-    { provide: PERFECT_SCROLLBAR_CONFIG, useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG, multi: true }
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

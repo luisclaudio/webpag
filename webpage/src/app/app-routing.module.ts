@@ -1,50 +1,53 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AuthenticationGuard } from "./core/authentication/guards/authentication.guard";
+import { AuthenticationGuard } from "./guards/authentication.guard";
+import { AuthorizationGuard } from "./guards/authorization.guard";
 
-import { FullComponent } from "./layouts/full/full.component";
-import { BlankComponent } from "./layouts/blank/blank.component";
-import { UnauthorizedComponent } from "./core/authorization/components/unauthorized/unauthorized.component";
+import { HomeComponent } from "./components/home/home.component";
+import { LoginComponent } from "./components/login/login.component";
+import { RegisterComponent } from "./components/register/register.component";
+import { BlankPageComponent } from "./layouts/blank-page/blank-page.component";
+import { FullPageComponent } from "./layouts/full-page/full-page.component";
+import { UnauthorizedComponent } from "./layouts/unauthorized/unauthorized.component";
 
 const routes: Routes = [
   {
     path: '',
     canActivate: [ AuthenticationGuard ],
-    component: FullComponent,
+    component: FullPageComponent,
     children: [
       {
         path: '',
-        redirectTo: '/home',
-        pathMatch: 'full'
-      },
-      {
-        path: 'home',
-        component: UnauthorizedComponent
-      },
-      {
-        path: 'users',
-        loadChildren: () => import('./core/user/user.module').then(m => m.UserModule)
+        component: HomeComponent,
+        canActivate: [ AuthorizationGuard ],
+        data: {
+          role: 'home',
+        }
       },
       {
         path: 'unauthorized',
         component: UnauthorizedComponent
-      },
+      }
     ]
   },
   {
     path: '',
-    component: BlankComponent,
+    component: BlankPageComponent,
     children: [
       {
-        path: 'authentication',
-        loadChildren: () => import('./core/authentication/authentication.module').then(m => m.AuthenticationModule)
+        path: 'login',
+        component: LoginComponent
+      },
+      {
+        path: 'register',
+        component: RegisterComponent
       }
     ]
   },
   {
     path: '**',
-    redirectTo: 'authentication/404'
+    redirectTo: 'login'
   }
 ];
 
