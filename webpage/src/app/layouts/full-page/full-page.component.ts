@@ -8,7 +8,7 @@ import { MediaMatcher } from "@angular/cdk/layout";
 })
 export class FullPageComponent {
 
-  readonly name = 'AV-DOTZ';
+  readonly name = 'AV-WEBPAGE';
 
   public status: boolean = false;
 
